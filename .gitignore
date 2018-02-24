@@ -1,0 +1,7 @@
+\#*
+**.zip
+**.tar.gz
+**Makefile
+**Makefile.in
+config.log
+config.status

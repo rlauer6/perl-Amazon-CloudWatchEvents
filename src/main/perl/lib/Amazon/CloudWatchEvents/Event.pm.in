@@ -1,0 +1,74 @@
+package Amazon::CloudWatchEvents::Event;
+
+use parent qw/Class::Accessor/;
+
+__PACKAGE__->follow_best_practice;
+__PACKAGE__->mk_accessors(qw/detail detail_type resources source time/);
+
+use JSON;
+
+=pod
+
+=head1 NAME
+
+C<Amazon::CloudWatchEvents::Event>
+
+=head1 SYNOPSIS
+
+ my $cwe = new CloudWatchEvents( { credentials => new Amazon::Credentials() });
+
+ my $event = new CloudWatchEvents::Event( { detail      => {"foo" => "bar"},
+                                            detail_type => "foo",
+                                            resources   => [ arn, ... ],
+                                            source      => 'myapp',
+                                            time        => time
+                                          }
+                                        );
+
+$cwe->put_events($event, ...);
+
+=head1 DESCRIPTION
+
+Represents a CloudWatch Event.  See
+https://docs.aws.amazon.com/AmazonCloudWatchEvents/latest/APIReference/API_PutEvents.html.
+
+=head1 METHODS
+
+=head2 encode
+
+ ecnode()
+
+Returns a reference to the event that is suitable for encapsulating in
+an Entries data object. Adds the current time if C<time> is not set in
+the object.
+
+=cut
+
+sub encode {
+  my $self = shift;
+
+  my $args_out = {
+		  $self->get_detail()    ? (Detail     => to_json($self->get_detail())) : (),
+		  $self->get_detail_type ? (DetailType => $self->get_detail_type()) : (),
+		  $self->get_resources() ? (Resources  => $self->get_resources()) : (),
+		  $self->get_source()    ? (Source     => $self->get_source()) : (),
+		  Time => $self->get_time() || time
+		 };
+  
+  return $args_out
+}
+
+
+=pod
+
+=head1 AUTHOR
+
+Rob Lauer - <rlauer6@comcast.net>
+
+=head1 SEE ALSO
+
+C<Amazon::Credentials>, C<Amazon::CloudWatchEvents>
+
+=cut
+
+1;

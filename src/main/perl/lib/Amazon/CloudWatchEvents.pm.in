@@ -1,0 +1,219 @@
+package Amazon::CloudWatchEvents;
+
+=pod
+
+=head1 NAME
+
+C<Amazon::CloudWatchEvents>
+
+=head1 SYNOPSIS
+
+ use strict;
+ use warnings;
+ 
+ use Amazon::CloudWatchEvents;
+ use Amazon::Credentials;
+
+ my $cwe = new Amazon::CloudWatchEvents({credentials => new Amazon::Credentials}); 
+
+ my $event = $cwe->event({detail => { foo => "bar "}, detail_type => "biz", source => "myapp" });
+
+ $cwe->PutEvents($event);
+
+=head1 DESCRIPTION
+
+Interface to the AWS CloudWatchEvents API.  See the Amazon
+CloudWatchEvents API documentation for method details.
+
+L</https://docs.aws.amazon.com/AmazonCloudWatchEvents/latest/APIReference/Welcome.html>
+
+You should also be familiar with Cloud Watch Events.
+
+L</https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/WhatIsCloudWatchEvents.html>
+
+I<Note that this class inherits from C<Amazon::API>>
+
+=cut
+
+use strict;
+use warnings;
+
+use parent qw/Amazon::API/;
+
+use Amazon::CloudWatchEvents::Event;
+
+use JSON qw/from_json to_json/;
+use Data::Dumper;
+
+my @API_METHODS = qw/
+		      DeleteRule
+		      DescribeEventBus
+		      DescribeRule
+		      DisableRule
+		      EnableRule
+		      ListRuleNamesByTarget
+		      ListRules
+		      ListTargetsByRule
+		      PutEvents
+		      PutPermission
+		      PutRule
+		      PutTargets
+		      RemovePermission
+		      RemoveTargets
+		      TestEventPattern/;
+
+=head1 METHODS
+
+I<Note that, other than the documented methods, all other API methods
+for Cloud Watch Events can be called by constructing the request
+payload and calling the method of the same name.  For example:>
+
+ $cwe->DisableRule({ Name => "cwe-test" });
+
+-or-
+
+ $cwe->DisableRule('{ "Name": "cwe-test" }', 'application/x-amz-json-1.1');
+
+I<Note also that when you pass a scalar as the parameter the
+Content-Type will assumed to be C<application/x-www-form-urlencoded>
+by default unless you explicitly pass the Content-Type.>
+
+See
+https://docs.aws.amazon.com/AmazonCloudWatchEvents/latest/APIReference/API_Operations.html
+for a complete list of API methods.
+
+=head2 new
+
+ new( options )
+
+C<options> should be a hash reference of options described
+below. I<All options are actually optional>.
+
+=over 5
+
+=item region
+
+AWS region.
+
+default: us-east-1
+
+=item credentials
+
+An C<Amazon::Credentials> object.  You can specify your credentials
+using this object or by setting your access keys and optional token
+directly.
+
+default: C<new Amazon::Credentials()>
+
+=item aws_secret_access_key
+
+Your AWS secret access key.
+
+default: none
+
+=item aws_access_key_id
+
+Your AWS access key id.
+
+default: none
+
+=item token
+
+Optional token if your credentials were temporary (from the instance profile or assumed role).
+
+default: none
+
+=item debug
+
+Boolean indicating debug mode which will dump some potentially helpful information to STDERR.
+
+default: 0
+
+=back
+
+=cut
+
+sub new {
+  my $class = shift;
+  my $options = shift || {};
+
+  $class->SUPER::new({
+		      %$options,
+		      service_url_base => 'events',
+		      version          => undef,
+		      api              => 'AWSEvents',
+		      api_methods      => \@API_METHODS,
+		      content_type     => 'application/x-amz-json-1.1'
+		     });
+}
+
+=pod
+
+=head1 event
+
+ event()
+
+Returns a C<Amazon::CloudWatchEvent::Event> object.
+
+Example:
+
+ my $event = $cwe->event({detail => { foo => "bar "}, detail_type => "biz", source => "myapp" });
+
+ $cwe->PutEvents($event);
+
+=cut
+
+sub event {
+  my $self = shift;
+  
+  return new Amazon::CloudWatchEvents::Event(@_);
+}
+
+=pod
+
+=head2 put_events
+
+=head2 PutEvents
+
+ put_events(event, ...)
+
+Sends one or more custom C<CloudWatchEvents::Event> objects to Amazon CloudWatch Events so that they can be matched to rules.
+
+ my $event = new CloudWatchEvents::Event({detail => { foo => "bar" }, ...});
+
+ $cwe->put_events($event);
+
+=cut
+
+sub put_events {
+  my $self = shift;
+
+  die "usage: put_events(event, event, ...)\n"
+    unless @_;
+  
+  foreach (@_) {
+    die ref($_) . ": not an Amazon::CloudWatchEvent::Event object"
+      unless ref($_) =~/Amazon::CloudWatchEvents::Event/;
+  }
+  
+  my $payload = { Entries => [ map { $_->encode; } @_ ] }, { pretty => $self->get_debug() };
+
+  print STDERR Dumper [ $payload ]
+    if $self->get_debug;
+  
+  $self->invoke_api('PutEvents', $payload);
+}
+
+=pod
+
+=head1 AUTHOR
+
+Rob Lauer - <rlauer6@comcast.net>
+
+=head1 SEE ALSO
+
+C<Amazon::API>, C<Amazon::Credentials>
+
+=cut
+
+1;
