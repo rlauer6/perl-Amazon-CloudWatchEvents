@@ -196,7 +196,7 @@ sub put_events {
       unless ref($_) =~/Amazon::CloudWatchEvents::Event/;
   }
   
-  my $payload = { Entries => [ map { $_->encode; } @_ ] }, { pretty => $self->get_debug() };
+  my $payload = { Entries => [ map { $_->encode; } @_ ] };
 
   print STDERR Dumper [ $payload ]
     if $self->get_debug;
