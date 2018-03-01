@@ -89,7 +89,7 @@ AC_CONFIG_MACRO_DIR([autotools])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign tar-ustar])
 
 dnl --enable-rpm-build-mode
-RPM_BUILD_MODE
+AX_RPMBUILD_CHECK
 
 AC_PATH_PROG([BASHRUN],
 	[bash])

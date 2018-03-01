@@ -35,7 +35,7 @@ BuildRequires: automake autoconf
 #--------------------------------------------------------------------#
 
 Summary:  @PACKAGE@
-Group:    Amazon API
+Group:    Development/Libraries
 
 %description
 

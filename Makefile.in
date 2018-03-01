@@ -41,7 +41,6 @@ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/autotools/ads_PERL_INCLUDES.m4 \
 	$(top_srcdir)/autotools/ads_PERL_MODULE.m4 \
 	$(top_srcdir)/autotools/ads_PROG_PERL.m4 \
-	$(top_srcdir)/autotools/am_rpm_build_mode.m4 \
 	$(top_srcdir)/autotools/ax_am_conditional_example.m4 \
 	$(top_srcdir)/autotools/ax_deps_check.m4 \
 	$(top_srcdir)/autotools/ax_distcheck_hack.m4 \

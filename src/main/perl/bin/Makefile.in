@@ -40,7 +40,6 @@ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/autotools/ads_PERL_INCLUDES.m4 \
 	$(top_srcdir)/autotools/ads_PERL_MODULE.m4 \
 	$(top_srcdir)/autotools/ads_PROG_PERL.m4 \
-	$(top_srcdir)/autotools/am_rpm_build_mode.m4 \
 	$(top_srcdir)/autotools/ax_am_conditional_example.m4 \
 	$(top_srcdir)/autotools/ax_deps_check.m4 \
 	$(top_srcdir)/autotools/ax_distcheck_hack.m4 \
@@ -166,8 +165,8 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRScd = .
 perlrun = @PERL@
-@RPM_BUILD_MODE_FALSE@perlwc = @PERL@ -wc
-@RPM_BUILD_MODE_TRUE@perlwc = \#
+@RPMBUILD_ENABLED_FALSE@perlwc = @PERL@ -wc
+@RPMBUILD_ENABLED_TRUE@perlwc = \#
 PERLSCRIPTS = 
 GPERLSCRIPTS = $(PERLSCRIPTS:.pl.in=.pl)
 G1MANPAGES = $(GPERLSCRIPTS:.pl=.1sis)

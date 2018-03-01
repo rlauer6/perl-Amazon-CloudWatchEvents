@@ -602,8 +602,6 @@ PACKAGE_BUGREPORT='rlauer6@comcast.net'
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
-RPMBUILD_ENABLED_FALSE
-RPMBUILD_ENABLED_TRUE
 DISTCHECK_HACK_ENABLED_FALSE
 DISTCHECK_HACK_ENABLED_TRUE
 SOME_THINGY_ENABLED_FALSE
@@ -620,8 +618,8 @@ perl5libdir
 PERL
 POD2MAN
 BASHRUN
-RPM_BUILD_MODE_FALSE
-RPM_BUILD_MODE_TRUE
+RPMBUILD_ENABLED_FALSE
+RPMBUILD_ENABLED_TRUE
 am__untar
 am__tar
 AMTAR
@@ -686,14 +684,13 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
-enable_rpm_build_mode
+enable_rpmbuild
 with_perl5libdir
 with_perl_includes
 enable_perldeps
 enable_deps
 enable_some_thingy
 enable_distcheck_hack
-enable_rpmbuild
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1325,12 +1322,11 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-rpm-build-mode       configure RPM build mode (disables certain checks), default: disabled
+  --enable-rpmbuild configure for an RPM build
   --disable-perldeps don't abort if dependencies missing
   --disable-deps don't abort if dependencies missing
   --enable-some-thingy      configure some_thingy, exposes $SOME_THINGY_ENABLED
   --enable-distcheck-hack enable distcheck hack
-  --enable-rpmbuild configure for an RPM build
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -2474,32 +2470,31 @@ $as_echo "$am_cv_prog_tar_ustar" >&6; }
 
 
 
+    { $as_echo "$as_me:$LINENO: checking whether to enable an RPM build environment" >&5
+$as_echo_n "checking whether to enable an RPM build environment... " >&6; }
 
-    { $as_echo "$as_me:$LINENO: checking whether to enable build mode" >&5
-$as_echo_n "checking whether to enable build mode... " >&6; }
-
-    # Check whether --enable-rpm_build_mode was given.
-if test "${enable_rpm_build_mode+set}" = set; then
-  enableval=$enable_rpm_build_mode;
+    # Check whether --enable-rpmbuild was given.
+if test "${enable_rpmbuild+set}" = set; then
+  enableval=$enable_rpmbuild;
             case "${enableval}" in
-                yes)  rpm_build_mode=true  ;;
-                no)   rpm_build_mode=false ;;
+                yes)  ax_rpmbuild_enabled=true  ;;
+                no)   ax_rpmbuild_enabled=false ;;
                 *)
-                    { { $as_echo "$as_me:$LINENO: error: bad value (\"$enableval\") for '--enable-rpm-build-mode' option" >&5
-$as_echo "$as_me: error: bad value (\"$enableval\") for '--enable-rpm-build-mode' option" >&2;}
+                    { { $as_echo "$as_me:$LINENO: error: bad value (\"$enableval\") for '--enable-rpmbuild' option" >&5
+$as_echo "$as_me: error: bad value (\"$enableval\") for '--enable-rpmbuild' option" >&2;}
    { (exit 1); exit 1; }; }
                     ;;
             esac
 
 else
 
-            rpm_build_mode=false
+            ax_rpmbuild_enabled=false
 
 
 fi
 
 
-    if ${rpm_build_mode}; then
+    if ${ax_rpmbuild_enabled}; then
         { $as_echo "$as_me:$LINENO: result: yes" >&5
 $as_echo "yes" >&6; }
     else
@@ -2507,12 +2502,12 @@ $as_echo "yes" >&6; }
 $as_echo "no" >&6; }
     fi
 
-         if ${rpm_build_mode}; then
-  RPM_BUILD_MODE_TRUE=
-  RPM_BUILD_MODE_FALSE='#'
+         if test "${ax_rpmbuild_enabled}" = "true"; then
+  RPMBUILD_ENABLED_TRUE=
+  RPMBUILD_ENABLED_FALSE='#'
 else
-  RPM_BUILD_MODE_TRUE='#'
-  RPM_BUILD_MODE_FALSE=
+  RPMBUILD_ENABLED_TRUE='#'
+  RPMBUILD_ENABLED_FALSE=
 fi
 
 
@@ -3449,10 +3444,10 @@ LTLIBOBJS=$ac_ltlibobjs
 
 
 
-if test -z "${RPM_BUILD_MODE_TRUE}" && test -z "${RPM_BUILD_MODE_FALSE}"; then
-  { { $as_echo "$as_me:$LINENO: error: conditional \"RPM_BUILD_MODE\" was never defined.
+if test -z "${RPMBUILD_ENABLED_TRUE}" && test -z "${RPMBUILD_ENABLED_FALSE}"; then
+  { { $as_echo "$as_me:$LINENO: error: conditional \"RPMBUILD_ENABLED\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
-$as_echo "$as_me: error: conditional \"RPM_BUILD_MODE\" was never defined.
+$as_echo "$as_me: error: conditional \"RPMBUILD_ENABLED\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
